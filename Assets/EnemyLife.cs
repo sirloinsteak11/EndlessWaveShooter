@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class enemyLife : MonoBehaviour
@@ -7,6 +10,8 @@ public class enemyLife : MonoBehaviour
 
     public GameObject enemy;
     public Rigidbody2D rb2d;
+    private Renderer rend;
+    private Color originalColor;
     public int life;
 
     // Start is called before the first frame update
@@ -14,6 +19,8 @@ public class enemyLife : MonoBehaviour
     {
         enemy = GetComponent<GameObject>();
         rb2d = GetComponent<Rigidbody2D>();
+        rend = GetComponent<Renderer>();
+        originalColor = GetComponent<Renderer>().material.color;
     }
 
     // Update is called once per frame
@@ -32,5 +39,13 @@ public class enemyLife : MonoBehaviour
             return;
         }
         life--;
+        ChangeColorOnHit();
+    }
+
+    private IEnumerator ChangeColorOnHit()
+    {
+        rend.material.color = Color.white;
+        yield return new WaitForSeconds(.5f);
+        rend.material.color = originalColor;
     }
 }

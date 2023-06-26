@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Bullet
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
@@ -14,9 +15,9 @@ TagManager:
   - Water
   - UI
   - PostProcessing
-  - 
-  - 
-  - 
+  - Main Game Elements
+  - Border
+  - Projectiles
   - 
   - 
   - 

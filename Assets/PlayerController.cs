@@ -81,6 +81,14 @@ public class PlayerController : MonoBehaviour
                 iframe = iframeValue;
             }
         }
+        if (collision.collider.CompareTag("EnemyBullet"))
+        {
+            if (!isInvisible)
+            {
+                GameController.lifeCount--;
+                iframe = iframeValue;
+            }
+        }
     }
 
     public void FireBullet()

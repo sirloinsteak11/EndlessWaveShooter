@@ -24,12 +24,12 @@ public class AIChase : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(Vector3.forward * (angle - 90));
 
-        if (distance > 2.5)
+        if (distance > 4)
         {
             transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
         }
 
-        if (distance < 2.5)
+        if (distance < 2)
         {
             transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position - new Vector3(2, 2, 0), -speed * Time.deltaTime);
         } 
