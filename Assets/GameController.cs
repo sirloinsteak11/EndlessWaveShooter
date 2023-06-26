@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,13 +61,12 @@ public class GameController : MonoBehaviour
 
             if (!enemiesFinishedSpawning)
             {
-                SpawnEnemies();
             }
             score += scoreFactor;
 
             if (spawnInterval == 0)
             {
-                spawnInterval = initialSpawnInterval;
+                //spawnInterval = initialSpawnInterval;
                 canSpawn = true;
             }
             spawnInterval--;
@@ -83,6 +83,7 @@ public class GameController : MonoBehaviour
         hasStarted = true;
         waveCount = 1;
         enemyCount = 5;
+        SpawnEnemies();
     }
 
     public void OnDeath()
@@ -96,23 +97,23 @@ public class GameController : MonoBehaviour
         enemiesFinishedSpawning = false;
         waveCount++;
         initialSpawnInterval = (int)(initialSpawnInterval / 1.1);
+        spawnInterval = initialSpawnInterval;
+        EnemyController.spawnInterval = (int)(EnemyController.spawnInterval / 1.1);
+        enemiesSpawned = 0;
+        SpawnEnemies();
     }
 
-    public void SpawnEnemies()
+    async public void SpawnEnemies()
     {
-        for (int i = enemiesSpawned; i < enemyCount; i++)
+        if (waveCount == 1)
         {
-            if (canSpawn)
-            {
-                if (spawnInterval > 0)
-                {
-                    return;
-                }
-                int classNum = UnityEngine.Random.Range(0, enemyClasses.Length);
-                EnemyController.CreateEnemy(enemyClasses[classNum], new Vector3(0, 0, 0));
-                canSpawn = false;
-                enemiesSpawned++;
-            }
+            await EnemyController.CreateEnemy("weak", new Vector3(0, 0, 0), enemyCount);
+        }
+
+        if (waveCount == 2)
+        {
+            await EnemyController.CreateEnemy("weak", new Vector3(0, 0, 0), 5);
+            await EnemyController.CreateEnemy("medium", new Vector3(0, 0, 0), 1);
         }
     }
 }

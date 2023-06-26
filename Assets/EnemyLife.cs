@@ -7,6 +7,7 @@ public class enemyLife : MonoBehaviour
 
     public GameObject enemy;
     public Rigidbody2D rb2d;
+    public int life;
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +19,10 @@ public class enemyLife : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (life == 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -27,6 +31,6 @@ public class enemyLife : MonoBehaviour
         {
             return;
         }
-        Destroy(gameObject);
+        life--;
     }
 }
