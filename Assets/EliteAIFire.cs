@@ -32,6 +32,7 @@ public class EliteAIFire : MonoBehaviour
         if (fireCooldown < 1)
         {
             await TripleShot(3);
+            fireCooldown = fireCooldownAmount;
         }
     }
 
@@ -47,6 +48,5 @@ public class EliteAIFire : MonoBehaviour
         }
 
         audioSource.Play();
-        fireCooldown = fireCooldownAmount;
     }
 }

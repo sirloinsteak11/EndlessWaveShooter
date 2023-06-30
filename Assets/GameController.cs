@@ -194,5 +194,14 @@ public class GameController : MonoBehaviour
             StartCoroutine(EnemyController.CreateEnemy("elite", enemySpawnLocations, 2));
             StartCoroutine(EnemyController.CreateEnemy("weak", enemySpawnLocations, 2));
         }
+
+        if (waveCount > 10) 
+        {
+            for (int i = 0; i < enemyCount; i++)
+            {
+                StartCoroutine(EnemyController.CreateEnemy(enemyClasses[UnityEngine.Random.Range(0, enemyClasses.Length)], enemySpawnLocations, 1));
+                enemiesSpawned++;
+            }
+        }
     }
 }
