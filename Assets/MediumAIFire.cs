@@ -9,10 +9,13 @@ public class MediumAIFire : MonoBehaviour
     public int fireCooldown, fireCooldownAmount;
     public bool canFire;
     public Transform mebs1, mebs2, mebs3;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip fireSfx;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource.clip = fireSfx;
         fireCooldown = fireCooldownAmount;
         mebs1 = transform.Find("MEBS1").GetComponent<Transform>();
         mebs2 = transform.Find("MEBS2").GetComponent<Transform>();
@@ -37,6 +40,8 @@ public class MediumAIFire : MonoBehaviour
 
             GameObject bulletClone3 = Instantiate(mediumBullet, mebs3.position, mebs3.rotation);
             bulletClone3.GetComponent<Rigidbody2D>().velocity = mebs3.up * bulletSpeed;
+
+            audioSource.Play();
 
             fireCooldown = fireCooldownAmount;
         }

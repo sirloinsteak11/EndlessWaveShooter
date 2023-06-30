@@ -9,14 +9,11 @@ public class AIChase : MonoBehaviour
     public float speed;
     private float distance;
 
-    void Start()
-    {
-        player = GameObject.Find("Player");
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
+        player = GameObject.Find("Player");
+
         distance = Vector2.Distance(transform.position, player.transform.position);
         Vector2 direction = player.transform.position - transform.position;
         direction.Normalize();

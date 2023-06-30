@@ -9,10 +9,13 @@ public class WeakAIFire : MonoBehaviour
     public int fireCooldown, fireCooldownAmount;
     public bool canFire;
     public Transform bulletSpawnLocation;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip fireSfx;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource.clip = fireSfx;
         fireCooldown = fireCooldownAmount;
         bulletSpawnLocation = transform.Find("weakEnemyBulletSpawn").GetComponent<Transform>();
     }
@@ -30,6 +33,8 @@ public class WeakAIFire : MonoBehaviour
             GameObject bulletClone = Instantiate(weakBullet, bulletSpawnLocation.position, transform.rotation);
 
             bulletClone.GetComponent<Rigidbody2D>().velocity = bulletSpawnLocation.up * bulletSpeed;
+
+            audioSource.Play();
 
             fireCooldown = fireCooldownAmount;
         }

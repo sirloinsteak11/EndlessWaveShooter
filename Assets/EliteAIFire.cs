@@ -10,10 +10,13 @@ public class EliteAIFire : MonoBehaviour
     public int fireCooldown, fireCooldownAmount, bulletFireInterval; //bulletFireInterval in ms
     public bool canFire;
     public Transform bulletSpawnLocation;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip fireSfx;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource.clip = fireSfx;
         fireCooldown = fireCooldownAmount;
         bulletSpawnLocation = transform.Find("eliteEnemyBulletSpawn").GetComponent<Transform>();
     }
@@ -42,6 +45,8 @@ public class EliteAIFire : MonoBehaviour
 
             await Task.Delay(bulletFireInterval);
         }
+
+        audioSource.Play();
         fireCooldown = fireCooldownAmount;
     }
 }

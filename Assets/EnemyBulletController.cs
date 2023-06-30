@@ -6,7 +6,7 @@ public class EnemyBulletController : MonoBehaviour
 {
     private void FixedUpdate()
     {
-        int bulletTimer = 100;
+        int bulletTimer = 50;
         bulletTimer--;
 
         if (bulletTimer == 0)

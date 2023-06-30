@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,15 +8,22 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float moveSpeed, bulletSpeed;
     [SerializeField] Rigidbody2D rb2d;
-    [SerializeField] GameObject playerBullet;
+    [SerializeField] GameObject playerBullet, playerDeathParticle, invincCircle;
+    private SpriteRenderer rend;
     public GameController GameController;
     public int iframe, iframeValue, fireCooldown, fireCooldownAmount;
     public bool isInvisible, canFire;
     public Transform bulletSpawnLocation;
+    [SerializeField] AudioSource audiosource;
+    [SerializeField] AudioClip hurtsfx;
+    public PlayerDeathNoiseController pdnc;
 
     // Start is called before the first frame update
     void Start()
     {
+        audiosource = GetComponent<AudioSource>();
+        audiosource.clip = hurtsfx;
+        rend = GetComponent<SpriteRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
         isInvisible = false;
         fireCooldown = 0;
@@ -56,9 +64,11 @@ public class PlayerController : MonoBehaviour
         {
             isInvisible = true;
             iframe--;
+            StartCoroutine(InvincibilityColorFlash());
         } else
         {
             isInvisible = false;
+            invincCircle.SetActive(false);
         }
 
         if (fireCooldown > 0)
@@ -71,22 +81,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    async public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Enemy"))
         {
             if (!isInvisible)
             {
+                playerDeathParticle.transform.position = transform.position;
+                playerDeathParticle.GetComponent<ParticleSystem>().Play();
                 GameController.lifeCount--;
-                iframe = iframeValue;
+                await Respawn();
+                //iframe = iframeValue;
             }
         }
         if (collision.collider.CompareTag("EnemyBullet"))
         {
             if (!isInvisible)
             {
+                playerDeathParticle.transform.position = transform.position;
+                playerDeathParticle.GetComponent<ParticleSystem>().Play();
                 GameController.lifeCount--;
-                iframe = iframeValue;
+                await Respawn();
             }
         }
     }
@@ -97,5 +112,29 @@ public class PlayerController : MonoBehaviour
         GameObject bulletClone = Instantiate(playerBullet, bulletSpawnLocation.position, transform.rotation);
 
         bulletClone.GetComponent<Rigidbody2D>().velocity = bulletSpawnLocation.up * bulletSpeed;
+    }
+
+    async public Task Respawn()
+    {
+        pdnc.PlayDeathNoise();
+        gameObject.SetActive(false);
+
+        await Task.Delay(2000);
+
+        if (GameController.lifeCount > 0)
+        {
+            gameObject.SetActive(true);
+            transform.position = new Vector3(0, 0, 0);
+            invincCircle.SetActive(true);
+            iframe = iframeValue;
+        }
+    }
+
+    public IEnumerator InvincibilityColorFlash()
+    {
+        yield return new WaitForSeconds(0.01f);
+        rend.color = Color.clear;
+        yield return new WaitForSeconds(0.01f);
+        rend.color = Color.white;
     }
 }

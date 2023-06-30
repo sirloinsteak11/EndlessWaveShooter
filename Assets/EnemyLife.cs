@@ -8,19 +8,20 @@ using UnityEngine;
 public class enemyLife : MonoBehaviour
 {
 
-    public GameObject enemy;
     public Rigidbody2D rb2d;
-    private Renderer rend;
+    [SerializeField] SpriteRenderer rend;
+    [SerializeField] AudioSource audiosource;
+    [SerializeField] AudioClip hurtsfx;
     private Color originalColor;
     public int life;
 
     // Start is called before the first frame update
     void Start()
     {
-        enemy = GetComponent<GameObject>();
+        audiosource.clip = hurtsfx;
         rb2d = GetComponent<Rigidbody2D>();
-        rend = GetComponent<Renderer>();
-        originalColor = GetComponent<Renderer>().material.color;
+        rend = GetComponent<SpriteRenderer>();
+        originalColor = GetComponent<SpriteRenderer>().color;
     }
 
     // Update is called once per frame
@@ -39,13 +40,16 @@ public class enemyLife : MonoBehaviour
             return;
         }
         life--;
-        ChangeColorOnHit();
+        audiosource.Play();
+        StartCoroutine(ChangeColorOnHit());
     }
 
     private IEnumerator ChangeColorOnHit()
     {
-        rend.material.color = Color.white;
-        yield return new WaitForSeconds(.5f);
-        rend.material.color = originalColor;
+        rend.color = Color.white;
+        yield return new WaitForSeconds(.05f);
+        rend.color = originalColor;
+
+
     }
 }

@@ -15,6 +15,11 @@ public class bulletController : MonoBehaviour
         {
             return;
         }
+
+        if (collision.collider.CompareTag("Blue"))
+        {
+            return;
+        }
         Destroy(gameObject);
     } 
 }

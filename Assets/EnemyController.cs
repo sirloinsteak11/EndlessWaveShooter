@@ -11,31 +11,31 @@ public class EnemyController : MonoBehaviour
 
     // message in the editor that informs user thaT spawnInterval value is in seconds and not ms
     public bool spawnIntervalIsInSeconds;
-    public int spawnInterval;
+    public float spawnInterval;
 
-    async public Task CreateEnemy(string enemyClass, Vector3 position, int times = 1)
+    public IEnumerator CreateEnemy(string enemyClass, Transform[] spawn, int times = 1)
     {
         // Instantiate(enemySprite, position, Quaternion.identity);
 
         for (int i = 0; i < times; i++)
         {
-            await Task.Delay((int)(spawnInterval * 1000));
+            yield return new WaitForSeconds(spawnInterval);
 
             if (enemyClass == "weak")
             {
-                Instantiate(weakEnemy, position, Quaternion.identity);
+                Instantiate(weakEnemy, spawn[UnityEngine.Random.Range(0, spawn.Length)].position, Quaternion.identity);
             }
             if (enemyClass == "medium")
             {
-                Instantiate(mediumEnemy, position, Quaternion.identity);
+                Instantiate(mediumEnemy, spawn[UnityEngine.Random.Range(0, spawn.Length)].position, Quaternion.identity);
             }
             if (enemyClass == "elite")
             {
-                Instantiate(eliteEnemy, position, Quaternion.identity);
+                Instantiate(eliteEnemy, spawn[UnityEngine.Random.Range(0, spawn.Length)].position, Quaternion.identity);
             }
             if (enemyClass == "eliteHeavy")
             {
-                Instantiate(eliteHeavyEnemy, position, Quaternion.identity);
+                Instantiate(eliteHeavyEnemy, spawn[UnityEngine.Random.Range(0, spawn.Length)].position, Quaternion.identity);
             }
 
             GameController.enemiesSpawned++;
