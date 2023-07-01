@@ -7,7 +7,7 @@ public class EliteAIFire : MonoBehaviour
 {
     [SerializeField] float bulletSpeed;
     [SerializeField] GameObject EliteBullet;
-    public int fireCooldown, fireCooldownAmount, bulletFireInterval; //bulletFireInterval in ms
+    public int fireCooldown, fireCooldownAmount, bulletFireInterval, bulletCount; //bulletFireInterval in ms
     public bool canFire;
     public Transform bulletSpawnLocation;
     [SerializeField] AudioSource audioSource;
@@ -40,13 +40,16 @@ public class EliteAIFire : MonoBehaviour
     {
         for (int i = 0; i < times; i++)
         {
-            GameObject bulletClone = Instantiate(EliteBullet, bulletSpawnLocation.position, transform.rotation);
+            if (bulletCount < 3)
+            {
+                GameObject bulletClone = Instantiate(EliteBullet, bulletSpawnLocation.position, transform.rotation);
 
-            bulletClone.GetComponent<Rigidbody2D>().velocity = bulletSpawnLocation.up * bulletSpeed;
+                bulletClone.GetComponent<Rigidbody2D>().velocity = bulletSpawnLocation.up * bulletSpeed;
 
-            await Task.Delay(bulletFireInterval);
+                await Task.Delay(bulletFireInterval);
+            }
         }
-
+        bulletCount = 0;
         audioSource.Play();
     }
 }
